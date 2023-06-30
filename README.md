@@ -34,4 +34,6 @@ github: [kubedown_helper.js](https://github.com/AlpsMonaco/PanAutoHelper/blob/ma
 
 
 
-## 如果对您起到帮助，您也喜欢本仓库，请给一个star，谢谢~
+## 如果对您起到帮助，您也喜欢本仓库，请给一个star，谢谢~  
+
+由于我主要是写c++后端的，所以js可能哪里写得不好，欢迎与我联系，提交意见、PR等。  
