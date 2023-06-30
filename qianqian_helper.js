@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         百度网盘-千千下载助手-自动下载文件夹中的文件
 // @namespace    http://tampermonkey.net/
-// @version      0.1.8
+// @version      0.1.9
 // @description  帮助你自动下载百度网盘中一个文件夹里的所有文件，省去一个个点
 // @author       You
 // @match        *://pan.baidu.com/*
@@ -909,9 +909,47 @@
     }
   }
   
-  async function download(link) {
-  
-  }
+  const Notification = (function () {
+    let element = null
+
+    function init_element() {
+        element = document.createElement('div');
+        element.style.width = '300px';
+        element.style.minHeight = '70px';
+        element.style.position = 'fixed';
+        element.style.zIndex = 99999
+        element.style.top = '0';
+        element.style.left = '50%';
+        element.style.transform = 'translateX(-50%)';
+        element.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        element.style.color = '#fff';
+        element.style.textAlign = 'center';
+        element.style.lineHeight = '50px';
+        element.textContent = '正在获取链接，如果太久请刷新页面重试';
+        element.style.display = "none"
+        element.style.fontSize = '16px'
+        document.body.appendChild(element);
+        element.onclick = function(){
+          element.style.display = "none"
+        }
+    }
+
+    return {
+        get_element: function () {
+            if (element == null) init_element()
+            return element
+        },
+
+        hide: function () {
+            this.get_element().style.display = 'none'
+        },
+
+        show: function (msg) {
+            this.get_element().style.display = 'block'
+            this.get_element().textContent = msg
+        }
+    }
+})()
   
   
   const Aria2 = (function () {
@@ -949,12 +987,16 @@
       document.getElementById('btnEasyHelper').click()
       for (; ;) {
         try {
+          Notification.show("正在获取链接，如果太久请刷新页面重试")
           const address = await get_link_address()
+          Notification.show("成功发送到Motirx，正在下载中")
           aria2.call("addUri", [address], { "user-agent": "netdisk" });
           await wait_download_complete(aria2)
+          Notification.show("下载完成")
           break
         } catch (e) {
           console.error(e)
+          Notification.show("发生错误，重试中...")
           console.log("重试...")
           await sleep(1000)
           continue
@@ -966,9 +1008,14 @@
   }
   
   async function batch_download_current_page() {
+    Notification.show("开始解析")
     const file_list = get_download_list()
-    if (!file_list) return
+    if (!file_list) {
+      Notification.show("获取文件列表失败")
+      return
+    }
     await download_list(file_list)
+    Notification.show("所有任务下载完成,点击此处关闭窗口")
   }
   
   async function create_button() {

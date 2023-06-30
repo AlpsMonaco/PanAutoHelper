@@ -1,0 +1,50 @@
+<head>
+    <script type="text/javascript">
+        const Notification = (function () {
+            let element = null
+
+            function init_element() {
+                element = document.createElement('div');
+                element.style.width = '300';
+                element.style.height = '100';
+                element.style.position = 'fixed';
+                element.style.zIndex = 99999
+                element.style.top = '0';
+                element.style.left = '50%';
+                element.style.transform = 'translateX(-50%)';
+                element.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                element.style.color = '#fff';
+                element.style.textAlign = 'center';
+                element.style.lineHeight = '50px';
+                element.textContent = 'load success';
+                element.style.display = "none"
+                document.body.appendChild(element);
+            }
+
+            return {
+                get_element: function () {
+                    if (element == null) init_element()
+                    return element
+                },
+
+                hide: function () {
+                    this.get_element().style.display = 'none'
+                },
+
+                show: function (msg) {
+                    this.get_element().style.display = 'block'
+                    this.get_element().textContent = msg
+                }
+            }
+        })()
+
+        function start() {
+            Notification.show("hello")
+        }
+    </script>
+</head>
+
+<body>
+    <button onclick="start()">start</button>
+
+</body>
