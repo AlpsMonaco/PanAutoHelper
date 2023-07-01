@@ -29,6 +29,7 @@ github: [kubedown_helper.js](https://github.com/AlpsMonaco/PanAutoHelper/blob/ma
 ## Thanks
 * [aria2.js](https://github.com/sonnyp/aria2.js/)
 * [Motrix](https://github.com/agalwood/Motrix)
+* [ddddocr](https://github.com/sml2h3/ddddocr)
 * 千千下载助手的作者
 * KubeDown的作者
 
