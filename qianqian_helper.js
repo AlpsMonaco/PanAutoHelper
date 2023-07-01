@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         百度网盘-千千下载助手-自动下载文件夹中的文件
 // @namespace    http://tampermonkey.net/
-// @version      0.1.9
+// @version      0.1.12
 // @description  帮助你自动下载百度网盘中一个文件夹里的所有文件，省去一个个点
 // @author       You
 // @match        *://pan.baidu.com/*
@@ -892,14 +892,18 @@
   }
   
   async function get_link_address() {
+    let count = 0
     for (; ;) {
+      if(count++ >= 30) throw "timeout"
       await sleep(1000)
       let get_link_button = document.getElementById('dialogBtnGetUrl')
       if (!get_link_button) continue
       get_link_button.click()
       break
     }
+    count = 0
     for (; ;) {
+      if(count++ >= 30) throw "timeout"
       await sleep(1000)
       const copy_link_button = document.getElementById('dialogBtnIdm')
       if (!copy_link_button) continue
@@ -984,10 +988,10 @@
     for (let file of file_list) {
       set_checked(file, true)
       await sleep(1000)
-      document.getElementById('btnEasyHelper').click()
       for (; ;) {
         try {
-          Notification.show("正在获取链接，如果太久请刷新页面重试")
+          Notification.show("正在获取链接,超时30s自动重试")
+          document.getElementById('btnEasyHelper').click()
           const address = await get_link_address()
           Notification.show("成功发送到Motirx，正在下载中")
           aria2.call("addUri", [address], { "user-agent": "netdisk" });

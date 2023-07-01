@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         百度网盘-KubeDown-自动下载文件夹中的文件
 // @namespace    http://tampermonkey.net/
-// @version      0.1.10
+// @version      0.1.14
 // @description  帮助你自动下载百度网盘中一个文件夹里的所有文件，省去一个个点(Kubedown版)
 // @author       You
 // @grant        GM_xmlhttpRequest
@@ -939,7 +939,9 @@
   }
   
   async function get_link_address() {
+    let count = 0
     for (; ;) {
+      if(count++ >= 30) throw "timeout"
       await sleep(1000)
       const captcha_container = document.getElementById('swal2-html-container')
       if (!captcha_container) continue
@@ -954,7 +956,9 @@
       confirm_button.click()
       break
     }
+    count = 0
     for (; ;) {
+      if(count++ >= 30) throw "timeout"
       await sleep(1000)
       const link_input = document.getElementById('swal-input1')
       if (!link_input) continue
@@ -1039,10 +1043,10 @@ const Notification = (function () {
     for (let file of file_list) {
       set_checked(file, true)
       await sleep(1000)
-      document.getElementById('KubeDown').click()
       for (; ;) {
         try {
-          Notification.show("正在获取链接，如果太久请刷新页面重试")
+          Notification.show("正在获取链接,超时30s自动重试")
+          document.getElementById('KubeDown').click()
           const address = await get_link_address()
           const file_name = get_file_name_from_link(address)
           Notification.show("成功发送到Motirx，正在下载中")
