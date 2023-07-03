@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         百度网盘-KubeDown-自动下载文件夹中的文件
 // @namespace    http://tampermonkey.net/
-// @version      0.1.14
+// @version      0.1.15
 // @description  帮助你自动下载百度网盘中一个文件夹里的所有文件，省去一个个点(Kubedown版)
 // @author       You
 // @grant        GM_xmlhttpRequest
@@ -943,6 +943,8 @@
     for (; ;) {
       if(count++ >= 30) throw "timeout"
       await sleep(1000)
+      const link_input = document.getElementById('swal-input1')
+      if (link_input) break
       const captcha_container = document.getElementById('swal2-html-container')
       if (!captcha_container) continue
       const captcha = captcha_container.children[0]
