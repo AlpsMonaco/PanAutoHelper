@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         百度网盘-KubeDown-自动下载文件夹中的文件
 // @namespace    http://tampermonkey.net/
-// @version      0.2.18
+// @version      0.2.19
 // @description  帮助你自动下载百度网盘中一个文件夹里的所有文件，省去一个个点(Kubedown版)
 // @author       You
 // @grant        GM_xmlhttpRequest
@@ -898,6 +898,7 @@ function get_file_name_from_link(link) {
     const param_key_value = param.split("=")
     if (param_key_value[0] == 'fin') return param_key_value[1]
   }
+  return null
 }
 
 const helper_address = 'http://127.0.0.1:8000/'
@@ -1063,8 +1064,12 @@ async function download_list(file_list) {
         document.getElementById('KubeDown').click()
         const address = await get_link_address()
         const file_name = get_file_name_from_link(address)
+        if (file_name) {
+          aria2.call("addUri", [address], { "user-agent": "netdisk", 'out': decodeURI(file_name) });
+        } else {
+          aria2.call("addUri", [address], { "user-agent": "netdisk" });
+        }
         Notification.show("成功发送到Motirx，正在下载中")
-        aria2.call("addUri", [address], { "user-agent": "netdisk", 'out': decodeURI(file_name) });
         await wait_download_complete(aria2)
         Notification.show("下载完成")
         break
