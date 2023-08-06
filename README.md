@@ -20,13 +20,14 @@ github: [kubedown_helper.js](https://github.com/AlpsMonaco/PanAutoHelper/blob/ma
 模拟用户选择要下载的文件，然后勾选，触发助手的按钮然后获取链接，通过jsonrpc连接到motrix的aria2，发起下载任务并监听完成，然后模拟勾选下个文件，重复此过程。
 
 ## 附录
+**更新：KubeDown现在已经不再需要验证码了**
 因为kubedown每次下载都需要验证码  
 所以 **“百度网盘-KubeDown-自动下载文件夹中的文件”** 这个脚本需要依赖我写的一个验证码识别服务器  
 源码地址 https://github.com/AlpsMonaco/captcha_solver_web  
 下载地址 https://github.com/AlpsMonaco/captcha_solver_web/releases/download/publish/captcha_resolver.exe
 
 
-## Thanks
+## Credits
 * [aria2.js](https://github.com/sonnyp/aria2.js/)
 * [Motrix](https://github.com/agalwood/Motrix)
 * [ddddocr](https://github.com/sml2h3/ddddocr)
